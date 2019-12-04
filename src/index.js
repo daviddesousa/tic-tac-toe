@@ -43,6 +43,23 @@ class Board extends React.Component {
     }
 }
 
+// Credits: https://github.com/guar47/react-tutorial-tic-tac-toe/blob/master/src/Game.js
+const getLocation = (move) => {
+    const locationMap = {
+        0: 'row: 1, col: 1',
+        1: 'row: 1, col: 2',
+        2: 'row: 1, col: 3',
+        3: 'row: 2, col: 1',
+        4: 'row: 2, col: 2',
+        5: 'row: 2, col: 3',
+        6: 'row: 3, col: 1',
+        7: 'row: 3, col: 2',
+        8: 'row: 3, col: 3',
+    };
+
+    return locationMap[move];
+};
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -66,6 +83,7 @@ class Game extends React.Component {
         this.setState({
             history: history.concat([{
                 squares: squares,
+                currentLocation: getLocation(i),
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -85,12 +103,15 @@ class Game extends React.Component {
         const winner = calculateWinner(current.squares);
 
         const moves = history.map((step, move) => {
+           const currentLocation = step.currentLocation ? `(${step.currentLocation})` : '';
            const desc = move ?
             'Go to move #' + move :
             'Go to game start';
            return (
              <li key={move}>
-                 <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                 <button onClick={() => this.jumpTo(move)}>
+                     {`${desc} ${currentLocation}`}
+                 </button>
              </li>
            );
         });
